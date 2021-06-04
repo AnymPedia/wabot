@@ -1,10 +1,10 @@
 let handler = async (m, { conn, text, participants, isOwner }) => {
   let users = participants.map(u => u.jid)
   let groups = conn.chats.all().filter(v => v.jid.endsWith('g.us') && !v.read_only && v.message && !v.announce).map(v => v.jid)
-  let cc = text ? m : m.quoted ? await m.getQuotedObj() : false || m conn.reply(id, `*「 AnymPedia 」*\n\n${text}`, null, { contextInfo: { mentionedJid: users } })
+  let cc = text ? m : m.quoted ? await m.getQuotedObj() : false || m 
   let teks = text ? text : cc.text 
   let content = conn.cMod(m.chat, cc, /bc|broadcast/i.test(teks) ? teks : teks + '\n' + readMore + '「 All Group Broadcast 」')
-  for (let id of groups) conn.copyNForward(id, content, true)
+  for (let id of groups) conn.reply(id, `*「 All Group Broadcast 」*\n\n${text}`, null, { contextInfo: { mentionedJid: users } })
   conn.reply(m.chat, `_Mengirim pesan broadcast ke ${groups.length} grup_`, m)
 }
 handler.help = ['broadcastgroup','bcgc'].map(v => v + ' <teks>')
